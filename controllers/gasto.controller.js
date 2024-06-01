@@ -26,7 +26,36 @@ const postOneGasto = async (req, res) => {
     }
 };
 
+const removeOneGasto = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const data = await Gasto.removeOne(id);
+
+        return res.json(data);
+    } catch (error) {
+        console.error("Error controlador ==> ", error);
+        return res.status(500).json({ ok: false, msg: "Error de servidor" });
+    }
+};
+
+const updateOneGasto = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { roommate, descripcion, monto } = req.body;
+
+        const data = await Gasto.updateOne(id, roommate, descripcion, monto);
+
+        return res.json(data);
+    } catch (error) {
+        console.error("Error controlador ==> ", error);
+        return res.status(500).json({ ok: false, msg: "Error de servidor" });
+    }
+};
+
 export const gastoMethod = {
     getAllGastos,
     postOneGasto,
+    removeOneGasto,
+    updateOneGasto,
 };
