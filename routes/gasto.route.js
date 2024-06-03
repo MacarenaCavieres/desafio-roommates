@@ -5,7 +5,7 @@ const router = Router();
 
 router.get("/gastos", gastoMethod.getAllGastos);
 router.post("/gasto", gastoMethod.postOneGasto);
-router.delete("/gasto?id=:id", gastoMethod.removeOneGasto);
-router.update("/gasto?id=:id", gastoMethod.removeOneGasto);
+router.delete("/gasto/:id", gastoMethod.removeOneGasto);
+router.put("/gasto/:id", gastoMethod.updateOneGasto);
 
 export default router;

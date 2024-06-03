@@ -8,8 +8,8 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/v1", routeRoom);
-app.use("/api/v1", routeGasto);
+app.use("/", routeRoom);
+app.use("/", routeGasto);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`http://localhost:${PORT}`));

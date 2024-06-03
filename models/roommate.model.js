@@ -1,6 +1,6 @@
 import { writeFile, readFile } from "fs/promises";
-import path from "path";
 import { v4 as uuidv4 } from "uuid";
+import path from "path";
 import axios from "axios";
 
 const __dirname = import.meta.dirname;
@@ -23,8 +23,8 @@ const postOne = async () => {
         let nombre = "";
         let email = "";
 
-        data.result.forEach((item) => {
-            nombre = item.name;
+        data.results.forEach((item) => {
+            nombre = `${item.name.first} ${item.name.last}`;
             email = item.email;
         });
 
@@ -32,6 +32,8 @@ const postOne = async () => {
             id: uuidv4(),
             nombre,
             email,
+            debe: 0,
+            recibe: 0,
         };
 
         view.push(newRoommate);
@@ -42,7 +44,30 @@ const postOne = async () => {
     } catch (error) {}
 };
 
+const updateOne = async (roommate, monto) => {
+    const preview = await readFile(pathFile, "utf-8");
+    const view = preview.trim() ? JSON.parse(preview) : [];
+
+    const roomUp = view.find((item) => item.nombre === roommate);
+
+    const owe = monto / view.length;
+
+    view.forEach((item) => {
+        if (item.nombre !== roomUp.nombre) {
+            item.debe = owe;
+        } else {
+            item.debe = 0;
+            item.recibe = owe * (view.length - 1);
+        }
+    });
+
+    const newView = await writeFile(pathFile, JSON.stringify(view));
+
+    return newView;
+};
+
 export const Roommate = {
     getAll,
     postOne,
+    updateOne,
 };

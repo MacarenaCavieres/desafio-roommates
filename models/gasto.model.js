@@ -1,5 +1,6 @@
 import path from "path";
 import { readFile, writeFile } from "fs/promises";
+import { v4 as uuidv4 } from "uuid";
 
 const __dirname = import.meta.dirname;
 
@@ -16,6 +17,7 @@ const postOne = async (roommate, descripcion, monto) => {
     const view = preview.trim() ? JSON.parse(preview) : [];
 
     const newGasto = {
+        id: uuidv4(),
         roommate,
         descripcion,
         monto,
@@ -32,10 +34,10 @@ const removeOne = async (id) => {
     const preview = await readFile(pathFile, "utf-8");
     const view = preview.trim() ? JSON.parse(preview) : [];
 
-    const dataPreview = view.find((item) => item.id === +id);
+    const dataPreview = view.find((item) => item.id === id);
     if (!dataPreview) return "Gasto no encontrado";
 
-    const data = view.filter((item) => item.id !== +id);
+    const data = view.filter((item) => item.id !== id);
 
     await writeFile(pathFile, JSON.stringify(data));
 
@@ -46,7 +48,7 @@ const updateOne = async (id, roommate, descripcion, monto) => {
     const preview = await readFile(pathFile, "utf-8");
     const view = preview.trim() ? JSON.parse(preview) : [];
 
-    const gasto = view.find((item) => item.id === +id);
+    const gasto = view.find((item) => item.id === id);
     if (!gasto) return "Gasto no encontrado";
 
     gasto.roommate = roommate;
